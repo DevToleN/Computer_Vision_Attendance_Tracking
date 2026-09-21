@@ -101,6 +101,28 @@ class Database:
             '''
             self.cursor.execute(query)
         return self.cursor.fetchall()
+
+    def get_report_dates(self):
+        """Return every date with recorded attendance and its present count."""
+        query = '''
+            SELECT DATE(timestamp) AS report_date, COUNT(*) AS present_count
+            FROM attendance
+            GROUP BY DATE(timestamp)
+            ORDER BY report_date DESC
+        '''
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
+
+    def get_all_attendance_records(self):
+        """Return all attendance records for CSV export."""
+        query = '''
+            SELECT DATE(a.timestamp), s.student_id, s.name, a.timestamp, a.status
+            FROM attendance a
+            LEFT JOIN students s ON s.student_id = a.student_id
+            ORDER BY a.timestamp DESC
+        '''
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
     
     def verify_admin(self, email, password):
         query = "SELECT * FROM admins WHERE email = ? AND password = ?"

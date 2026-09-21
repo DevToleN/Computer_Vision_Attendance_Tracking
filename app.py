@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, R
 import cv2
 import os
 import pandas as pd
-from io import BytesIO
+from io import BytesIO, StringIO
+import csv
 from face_detection_basic import FaceRecognitionSystem
 from database_sqlite import Database
 from datetime import datetime
@@ -154,7 +155,8 @@ def reports():
         return redirect(url_for('login'))
     date = request.args.get('date', datetime.now().date())
     attendance_data = db.get_attendance_report(date)
-    return render_template('reports.html', attendance_data=attendance_data, date=date)
+    report_dates = db.get_report_dates()
+    return render_template('reports.html', attendance_data=attendance_data, date=date, report_dates=report_dates)
 
 @app.route('/export_excel')
 def export_excel():
@@ -171,6 +173,21 @@ def export_excel():
     output.seek(0)
     
     return send_file(output, as_attachment=True, download_name=f'attendance_{date}.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+@app.route('/export_csv')
+def export_csv():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('login'))
+
+    records = db.get_all_attendance_records()
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['Date', 'Student ID', 'Name', 'Timestamp', 'Status'])
+    writer.writerows(records)
+
+    response = Response(output.getvalue(), mimetype='text/csv')
+    response.headers['Content-Disposition'] = 'attachment; filename=attendance_reports.csv'
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)

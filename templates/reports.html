@@ -6,8 +6,9 @@
 <div class="row">
     <div class="col-md-10 mx-auto">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header page-card-header">
                 <h3>Attendance Reports</h3>
+                <span class="status-pill"><i class="bi bi-calendar3" aria-hidden="true"></i> Daily records</span>
             </div>
             <div class="card-body">
                 <form method="GET" class="mb-4">
@@ -17,8 +18,9 @@
                             <input type="date" class="form-control" id="date" name="date" value="{{ date }}">
                         </div>
                         <div class="col-md-4 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary me-2">Filter</button>
-                            <a href="{{ url_for('export_excel', date=date) }}" class="btn btn-success">Export Excel</a>
+                            <button type="submit" class="btn btn-primary me-2"><i class="bi bi-funnel-fill me-1" aria-hidden="true"></i>Filter</button>
+                            <a href="{{ url_for('export_excel', date=date) }}" class="btn btn-success"><i class="bi bi-file-earmark-excel me-1" aria-hidden="true"></i>Excel</a>
+                            <a href="{{ url_for('export_csv') }}" class="btn btn-info ms-2"><i class="bi bi-filetype-csv me-1" aria-hidden="true"></i>CSV</a>
                         </div>
                     </div>
                 </form>
@@ -63,6 +65,33 @@
                     <p class="text-muted">No attendance records found for the selected date.</p>
                 </div>
                 {% endif %}
+
+                <div class="reports-history">
+                    <div class="section-heading">
+                        <div><span class="eyebrow">Archive</span><h2>All report dates</h2></div>
+                        <a href="{{ url_for('export_csv') }}" class="action-link"><i class="bi bi-download" aria-hidden="true"></i> Download all CSV</a>
+                    </div>
+                    {% if report_dates %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr><th>Date</th><th>Present</th><th>Open</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for report_date, present_count in report_dates %}
+                                <tr>
+                                    <td><i class="bi bi-calendar-event me-2 text-primary" aria-hidden="true"></i>{{ report_date }}</td>
+                                    <td><span class="badge bg-success">{{ present_count }} present</span></td>
+                                    <td><a class="action-link" href="{{ url_for('reports', date=report_date) }}">View report <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No dated attendance reports are available yet.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
