@@ -5,17 +5,22 @@
 {% block content %}
 <div class="row">
     <div class="col-md-10 mx-auto">
-        <div class="card">
-            <div class="card-header">
-                <h3>Live Attendance Tracking</h3>
+        <div class="card feature-card">
+            <div class="card-header page-card-header">
+                <h3><i class="bi bi-camera-video me-2" aria-hidden="true"></i>Live Attendance Tracking</h3>
+                <span class="status-pill"><i class="bi bi-broadcast-pin" aria-hidden="true"></i> Camera control</span>
             </div>
             <div class="card-body">
                 <div class="text-center mb-3">
-                    <button id="startBtn" class="btn btn-success me-2">Start Camera</button>
-                    <button id="stopBtn" class="btn btn-danger">Stop Camera</button>
+                    <button id="startBtn" class="btn btn-success me-2" type="button" aria-label="Start camera">
+                        <i class="bi bi-camera-video-fill me-1" aria-hidden="true"></i>Start Camera
+                    </button>
+                    <button id="stopBtn" class="btn btn-danger" type="button" aria-label="Stop camera">
+                        <i class="bi bi-camera-video-off-fill me-1" aria-hidden="true"></i>Stop Camera
+                    </button>
                 </div>
                 
-                <div class="text-center">
+                <div class="video-stage text-center">
                     <img id="videoFeed" src="{{ url_for('static', filename='videofeed.jpg') }}" alt="Video Feed" class="img-fluid border" style="max-width: 100%; height: 400px;">
                 </div>
                 
