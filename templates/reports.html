@@ -17,10 +17,19 @@
                             <label for="date" class="form-label">Select Date</label>
                             <input type="date" class="form-control" id="date" name="date" value="{{ date }}">
                         </div>
-                        <div class="col-md-4 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary me-2"><i class="bi bi-funnel-fill me-1" aria-hidden="true"></i>Filter</button>
-                            <a href="{{ url_for('export_excel', date=date) }}" class="btn btn-success"><i class="bi bi-file-earmark-excel me-1" aria-hidden="true"></i>Excel</a>
-                            <a href="{{ url_for('export_csv') }}" class="btn btn-info ms-2"><i class="bi bi-filetype-csv me-1" aria-hidden="true"></i>CSV</a>
+                        <div class="col-md-4">
+                            <label for="lecture_id" class="form-label">Lecture</label>
+                            <select class="form-control" id="lecture_id" name="lecture_id">
+                                <option value="">All lectures</option>
+                                {% for lecture_id, code, lecture_name, day, start, end in lectures %}
+                                <option value="{{ lecture_id }}" {% if selected_lecture_id == lecture_id %}selected{% endif %}>{{ code }} - {{ lecture_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end flex-wrap gap-2">
+                            <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Show attendance for the selected date"><i class="bi bi-funnel-fill me-1" aria-hidden="true"></i>Filter</button>
+                            <a href="{{ url_for('export_excel', date=date, lecture_id=selected_lecture_id) }}" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Download the selected report as an Excel spreadsheet"><i class="bi bi-file-earmark-excel me-1" aria-hidden="true"></i>Excel</a>
+                            <a href="{{ url_for('export_csv', lecture_id=selected_lecture_id) }}" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Download lecture attendance reports as a CSV file"><i class="bi bi-filetype-csv me-1" aria-hidden="true"></i>CSV</a>
                         </div>
                     </div>
                 </form>
@@ -75,14 +84,15 @@
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
-                                <tr><th>Date</th><th>Present</th><th>Open</th></tr>
+                                <tr><th>Date</th><th>Lecture</th><th>Present</th><th>Open</th></tr>
                             </thead>
                             <tbody>
-                                {% for report_date, present_count in report_dates %}
+                                {% for report_date, lecture_id, lecture_code, lecture_name, present_count in report_dates %}
                                 <tr>
                                     <td><i class="bi bi-calendar-event me-2 text-primary" aria-hidden="true"></i>{{ report_date }}</td>
+                                    <td><strong>{{ lecture_code }}</strong><br><small>{{ lecture_name }}</small></td>
                                     <td><span class="badge bg-success">{{ present_count }} present</span></td>
-                                    <td><a class="action-link" href="{{ url_for('reports', date=report_date) }}">View report <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
+                                    <td><a class="action-link" href="{{ url_for('reports', date=report_date, lecture_id=lecture_id) }}">View report <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

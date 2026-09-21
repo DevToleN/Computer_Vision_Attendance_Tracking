@@ -12,15 +12,24 @@
             </div>
             <div class="card-body">
                 <div class="text-center mb-3">
-                    <button id="startBtn" class="btn btn-success me-2" type="button" aria-label="Start camera">
+                    <div class="mb-3 text-start">
+                        <label for="lectureSelect" class="form-label">Lecture</label>
+                        <select id="lectureSelect" class="form-control" required>
+                            <option value="">Select a lecture before starting</option>
+                            {% for lecture_id, code, lecture_name, day, start, end in lectures %}
+                            <option value="{{ lecture_id }}">{{ code }} - {{ lecture_name }} ({{ day }}, {{ start }} - {{ end }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button id="startBtn" class="btn btn-success me-2" type="button" aria-label="Start camera" data-bs-toggle="tooltip" data-bs-placement="top" title="Start the webcam and begin attendance tracking">
                         <i class="bi bi-camera-video-fill me-1" aria-hidden="true"></i>Start Camera
                     </button>
-                    <button id="stopBtn" class="btn btn-danger" type="button" aria-label="Stop camera">
+                    <button id="stopBtn" class="btn btn-danger" type="button" aria-label="Stop camera" data-bs-toggle="tooltip" data-bs-placement="top" title="Stop the webcam and end attendance tracking">
                         <i class="bi bi-camera-video-off-fill me-1" aria-hidden="true"></i>Stop Camera
                     </button>
                 </div>
                 
-                <div class="video-stage text-center">
+                <div id="videoStage" class="video-stage camera-stage-hidden text-center">
                     <img id="videoFeed" src="{{ url_for('static', filename='videofeed.jpg') }}" alt="Video Feed" class="img-fluid border" style="max-width: 100%; height: 400px;">
                 </div>
                 

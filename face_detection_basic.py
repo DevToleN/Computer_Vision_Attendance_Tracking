@@ -30,7 +30,7 @@ class FaceRecognitionSystem:
             return True
         return False
     
-    def recognize_faces(self, frame):
+    def recognize_faces(self, frame, lecture_id=None):
         """Detect faces and simulate recognition"""
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
@@ -46,16 +46,13 @@ class FaceRecognitionSystem:
                 name = f"{self.registered_students[student_id]} ({student_id})"
                 
                 # Mark attendance (but only once per session to avoid spam)
-                if hasattr(self, '_marked_students'):
-                    if student_id not in self._marked_students:
-                        if self.db.mark_attendance(student_id):
-                            print(f"Attendance marked for {name}")
-                            self._marked_students.add(student_id)
-                else:
-                    self._marked_students = set()
-                    if self.db.mark_attendance(student_id):
+                if lecture_id is not None and lecture_id in self.db.get_student_lecture_ids(student_id):
+                    marked_key = (lecture_id, student_id)
+                    if not hasattr(self, '_marked_students'):
+                        self._marked_students = set()
+                    if marked_key not in self._marked_students and self.db.mark_attendance(student_id, lecture_id):
                         print(f"Attendance marked for {name}")
-                        self._marked_students.add(student_id)
+                        self._marked_students.add(marked_key)
             else:
                 name = "Unknown"
             

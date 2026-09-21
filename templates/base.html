@@ -14,13 +14,17 @@
             <a class="navbar-brand" href="{{ url_for('index') }}"><span class="brand-mark"><i class="bi bi-person-bounding-box" aria-hidden="true"></i></span>CV Attendance</a>
             <div class="navbar-nav app-nav-links">
                 <a class="nav-link" href="{{ url_for('index') }}"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i><span>Home</span></a>
-                <a class="nav-link" href="{{ url_for('register') }}"><i class="bi bi-person-plus-fill" aria-hidden="true"></i><span>Register</span></a>
+                {% if session.user_role == 'admin' %}
+                <a class="nav-link" href="{{ url_for('register') }}"><i class="bi bi-person-plus-fill" aria-hidden="true"></i><span>Register Student</span></a>
+                {% endif %}
+                <a class="nav-link" href="{{ url_for('lectures') }}"><i class="bi bi-journals" aria-hidden="true"></i><span>Lectures</span></a>
                 <a class="nav-link" href="{{ url_for('attendance') }}"><i class="bi bi-camera-video-fill" aria-hidden="true"></i><span>Attendance</span></a>
                 <a class="nav-link" href="{{ url_for('reports') }}"><i class="bi bi-bar-chart-fill" aria-hidden="true"></i><span>Reports</span></a>
             </div>
             <div class="navbar-nav ms-auto">
-                {% if session.admin_logged_in %}
-                    <a class="nav-link" href="{{ url_for('adminregister') }}"><i class="bi bi-person-gear" aria-hidden="true"></i><span>Add Admin</span></a>
+                {% if session.user_id %}
+                    {% if session.user_role == 'admin' %}<a class="nav-link" href="{{ url_for('adminregister') }}"><i class="bi bi-person-gear" aria-hidden="true"></i><span>Manage Users</span></a>{% endif %}
+                    <a class="nav-link" href="{{ url_for('profile') }}"><i class="bi bi-person-circle" aria-hidden="true"></i><span>Profile</span></a>
                     <a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right" aria-hidden="true"></i><span>Logout</span></a>
                 {% else %}
                     <a class="nav-link" href="{{ url_for('login') }}"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i><span>Login</span></a>

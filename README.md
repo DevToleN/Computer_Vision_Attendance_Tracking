@@ -20,6 +20,19 @@ A Flask web application for registering students, detecting faces from a webcam,
 
 The application uses Flask, OpenCV, pandas, NumPy, Pillow, and SQLite. SQLite is included with Python, so a separate database server is not required.
 
+### Password recovery email
+
+Password recovery sends a one-time link that expires after 30 minutes. Configure these environment variables before using the recovery flow:
+
+```text
+MAIL_SERVER=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=your-sender@example.com
+MAIL_PASSWORD=your-smtp-password
+```
+
+The application uses STARTTLS. Keep the SMTP password outside source control.
+
 ## Installation
 
 1. Clone or download this repository and open a terminal in the project directory.

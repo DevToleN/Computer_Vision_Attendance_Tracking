@@ -892,6 +892,20 @@ body {
   border-radius: 12px;
 }
 
+.camera-stage-hidden {
+  display: none;
+}
+
+.btn .bi-info-circle {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.btn:hover .bi-info-circle,
+.btn:focus-visible .bi-info-circle {
+  opacity: 1;
+}
+
 .video-stage img {
   display: block;
   width: 100%;

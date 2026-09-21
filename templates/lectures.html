@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Lectures - Attendance System{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    {% if not read_only %}<div class="col-lg-5">
+        <div class="card feature-card">
+            <div class="card-header page-card-header">
+                <h3><i class="bi bi-journal-plus me-2" aria-hidden="true"></i>Register Lecture</h3>
+            </div>
+            <div class="card-body">
+                {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+                {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Lecture Code</label>
+                        <input type="text" class="form-control" id="code" name="code" placeholder="e.g. CSC 401" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Lecture Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Computer Vision" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="day_of_week" class="form-label">Weekly Day</label>
+                        <select class="form-control" id="day_of_week" name="day_of_week" required>
+                            <option value="">Select a weekday</option>
+                            {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] %}
+                            <option value="{{ day }}">{{ day }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <label for="start_time" class="form-label">Start Time</label>
+                            <input type="time" class="form-control" id="start_time" name="start_time" min="08:00" max="14:00" required>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label for="end_time" class="form-label">End Time</label>
+                            <input type="time" class="form-control" id="end_time" name="end_time" min="11:00" max="17:00" required>
+                        </div>
+                    </div>
+                    <p class="form-text mb-3">Each lecture meets once weekly for exactly three hours between 8:00 AM and 5:00 PM.</p>
+                    <div class="mb-3">
+                        <label class="form-label">Assign Lecturers</label>
+                        {% for lecturer_id, email, lecturer_name in lecturers %}
+                        <label class="lecture-option d-flex align-items-center gap-2 mb-2">
+                            <input type="checkbox" name="lecturer_ids" value="{{ lecturer_id }}">
+                            <span>{{ lecturer_name }} <small class="text-muted">({{ email }})</small></span>
+                        </label>
+                        {% else %}
+                        <p class="form-text">Register a lecturer before assigning one to this lecture.</p>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Create Lecture</button>
+                </form>
+            </div>
+        </div>
+    </div>{% endif %}
+    <div class="col-lg-7">
+        <div class="card feature-card">
+            <div class="card-header page-card-header">
+                <h3><i class="bi bi-journals me-2" aria-hidden="true"></i>Available Lectures</h3>
+                <span class="status-pill">{{ lectures|length }} scheduled</span>
+            </div>
+            <div class="card-body">
+                {% if lectures %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead><tr><th>Code</th><th>Lecture</th><th>Schedule</th></tr></thead>
+                        <tbody>
+                            {% for id, code, name, day, start, end in lectures %}
+                            <tr><td><strong>{{ code }}</strong></td><td>{{ name }}</td><td>{{ day }}<br><small>{{ start }} - {{ end }}</small></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No lectures have been registered yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

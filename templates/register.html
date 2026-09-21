@@ -27,6 +27,20 @@
                         <label for="name" class="form-label">Full Name</label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Enroll in Lectures</label>
+                        {% if lectures %}
+                            {% for lecture_id, code, lecture_name, day, start, end in lectures %}
+                            <label class="lecture-option d-flex align-items-center gap-2 mb-2">
+                                <input type="checkbox" name="lecture_ids" value="{{ lecture_id }}">
+                                <span><strong>{{ code }}</strong> {{ lecture_name }} <small class="text-muted">({{ day }}, {{ start }} - {{ end }})</small></span>
+                            </label>
+                            {% endfor %}
+                        {% else %}
+                            <p class="form-text">Create a lecture before registering students.</p>
+                        {% endif %}
+                    </div>
                     
                     <div class="mb-3">
                         <label for="photo" class="form-label">Student Photo</label>
@@ -34,7 +48,9 @@
                         <div class="form-text">Upload a clear photo of the student's face.</div>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">Register Student</button>
+                    <button type="submit" class="btn btn-primary" {% if not lectures %}disabled{% endif %} data-bs-toggle="tooltip" data-bs-placement="top" title="Save this student and their face photo">
+                        Register Student
+                    </button>
                 </form>
             </div>
         </div>

@@ -10,8 +10,8 @@
             <h1>Attendance, made <span>clear.</span></h1>
             <p>Register your class, capture attendance in real time, and keep every report close at hand.</p>
             <div class="hero-actions">
-                <a href="{{ url_for('attendance') }}" class="btn btn-success"><i class="bi bi-camera-video-fill me-1" aria-hidden="true"></i>Start tracking</a>
-                <a href="{{ url_for('reports') }}" class="btn btn-outline-light"><i class="bi bi-bar-chart-fill me-1" aria-hidden="true"></i>View reports</a>
+                <a href="{{ url_for('attendance') }}" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Open the live camera to track attendance"><i class="bi bi-camera-video-fill me-1" aria-hidden="true"></i>Start tracking</a>
+                <a href="{{ url_for('reports') }}" class="btn btn-outline-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Review and export attendance reports"><i class="bi bi-bar-chart-fill me-1" aria-hidden="true"></i>View reports</a>
             </div>
         </div>
         <div class="hero-visual" aria-hidden="true">

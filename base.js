@@ -4,16 +4,27 @@ function initializeCameraControls() {
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const videoFeed = document.getElementById('videoFeed');
+    const videoStage = document.getElementById('videoStage');
+    const lectureSelect = document.getElementById('lectureSelect');
 
-    if (startBtn && stopBtn && videoFeed) {
+    if (startBtn && stopBtn && videoFeed && videoStage) {
+        stopBtn.disabled = true;
+
         startBtn.addEventListener('click', function() {
-            fetch('/start_camera')
+            if (!lectureSelect.value) {
+                showToast('Select a lecture before starting the camera', 'warning');
+                return;
+            }
+
+            fetch(`/start_camera?lecture_id=${encodeURIComponent(lectureSelect.value)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'started') {
                         videoFeed.src = '/video_feed';
+                        videoStage.classList.remove('camera-stage-hidden');
                         this.disabled = true;
                         stopBtn.disabled = false;
+                        lectureSelect.disabled = true;
                     }
                 });
         });
@@ -24,8 +35,10 @@ function initializeCameraControls() {
                 .then(data => {
                     if (data.status === 'stopped') {
                         videoFeed.src = '';
+                        videoStage.classList.add('camera-stage-hidden');
                         this.disabled = true;
                         startBtn.disabled = false;
+                        lectureSelect.disabled = false;
                     }
                 });
         });
@@ -136,6 +149,16 @@ function initializeTableSorting() {
     }
 }
 
+function initializeTooltips() {
+    if (typeof bootstrap === 'undefined') {
+        return;
+    }
+
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(element => {
+        new bootstrap.Tooltip(element);
+    });
+}
+
 function sortTable(columnIndex) {
     const table = document.querySelector('table');
     const tbody = table.querySelector('tbody');
@@ -175,6 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupFormValidation();
     initializeDatePicker();
     initializeTableSorting();
+    initializeTooltips();
     
     // Add any other initialization functions here
 });
@@ -186,6 +210,7 @@ if (typeof module !== 'undefined' && module.exports) {
         setupFormValidation,
         initializeDatePicker,
         initializeTableSorting,
+        initializeTooltips,
         showToast
     };
 }
