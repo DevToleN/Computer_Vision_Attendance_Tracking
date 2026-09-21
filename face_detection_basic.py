@@ -15,7 +15,7 @@ class FaceRecognitionSystem:
         for student_id, name, _ in students:
             self.registered_students[student_id] = name
     
-    def register_student(self, student_id, name, email, image_path):
+    def register_student(self, student_id, name, image_path):
         """Register a new student"""
         img = cv2.imread(image_path)
         if img is None:
@@ -25,7 +25,7 @@ class FaceRecognitionSystem:
         faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
         
         if len(faces) > 0:
-            self.db.add_student(student_id, name, email, "registered")
+            self.db.add_student(student_id, name, "registered")
             self.load_known_faces()
             return True
         return False

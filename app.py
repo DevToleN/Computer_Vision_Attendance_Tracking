@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, Response, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, jsonify, Response, session, send_file, send_from_directory
 import cv2
 import os
 import pandas as pd
@@ -10,6 +10,14 @@ from datetime import datetime
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.secret_key = 'your_secret_key_here'
+
+@app.route('/styling.css')
+def styling_css():
+    return send_from_directory('.', 'styling.css')
+
+@app.route('/base.js')
+def base_js():
+    return send_from_directory('.', 'base.js')
 
 # Create upload directory
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)

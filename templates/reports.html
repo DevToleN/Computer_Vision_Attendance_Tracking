@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-md-4 d-flex align-items-end">
                             <button type="submit" class="btn btn-primary me-2">Filter</button>
-                            <a href="/export_excel?date={{ date }}" class="btn btn-success">Export Excel</a>
+                            <a href="{{ url_for('export_excel', date=date) }}" class="btn btn-success">Export Excel</a>
                         </div>
                     </div>
                 </form>

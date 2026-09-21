@@ -35,7 +35,7 @@ class Database:
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS admins (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT,
+                email TEXT UNIQUE,
                 password TEXT
                 
             )
@@ -49,9 +49,17 @@ class Database:
         self.connection.commit()
     
     def add_admin(self, email, password):
-        query = "INSERT INTO admins (email, password) VALUES (?, ?)"
-        self.cursor.execute(query, (email, password))
-        self.connection.commit()
+        try:
+            self.cursor.execute("SELECT 1 FROM admins WHERE email = ?", (email,))
+            if self.cursor.fetchone():
+                return False
+            query = "INSERT INTO admins (email, password) VALUES (?, ?)"
+            self.cursor.execute(query, (email, password))
+            self.connection.commit()
+            return True
+        except sqlite3.IntegrityError:
+            self.connection.rollback()
+            return False
 
     def add_student(self, student_id, name, face_encoding):
         query = "INSERT INTO students (student_id, name, face_encoding) VALUES (?, ?, ?)"
@@ -81,7 +89,7 @@ class Database:
                 SELECT s.student_id, s.name, a.timestamp 
                 FROM students s 
                 LEFT JOIN attendance a ON s.student_id = a.student_id 
-                WHERE DATE(a.timestamp) = ?
+                WHERE DATE(a.timestamp) = ? OR a.timestamp IS NULL
             '''
             self.cursor.execute(query, (date,))
         else:
@@ -98,16 +106,3 @@ class Database:
         query = "SELECT * FROM admins WHERE email = ? AND password = ?"
         self.cursor.execute(query, (email, password))
         return self.cursor.fetchone() is not None
-    # Add an admin user
-def add_admin(self, email, password):
-    try:
-        query = "INSERT INTO admins (email, password) VALUES (?, ?)"
-        self.cursor.execute(query, (email, password))
-        self.connection.commit()
-        return True
-    except sqlite3.IntegrityError:
-        # Email already exists
-        return False
-    except Exception as e:
-        print(f"Error adding admin: {e}")
-        return False
