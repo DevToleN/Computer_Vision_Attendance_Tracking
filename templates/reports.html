@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Reports - Attendance System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3>Attendance Reports</h3>
+            </div>
+            <div class="card-body">
+                <form method="GET" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="date" class="form-label">Select Date</label>
+                            <input type="date" class="form-control" id="date" name="date" value="{{ date }}">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">Filter</button>
+                            <a href="/export_excel?date={{ date }}" class="btn btn-success">Export Excel</a>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student_id, name, timestamp in attendance_data %}
+                            <tr>
+                                <td>{{ student_id }}</td>
+                                <td>{{ name }}</td>
+                                <td>
+                                    {% if timestamp %}
+                                        {{ timestamp }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if timestamp %}
+                                        <span class="badge bg-success">Present</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Absent</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {% if not attendance_data %}
+                <div class="text-center">
+                    <p class="text-muted">No attendance records found for the selected date.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

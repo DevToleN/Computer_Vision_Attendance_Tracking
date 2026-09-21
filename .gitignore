@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+attendance.db
+static/uploads/*
+!static/uploads/.gitkeep
+.venv/
+venv/
+env/
+.env

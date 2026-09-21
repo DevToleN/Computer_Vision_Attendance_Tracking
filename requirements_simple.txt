@@ -1,0 +1,7 @@
+opencv-python
+flask
+mysql-connector-python
+numpy
+pillow
+pandas
+openpyxl

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Attendance System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">Computer Vision Attendance System</h1>
+            <p class="lead">Automated attendance tracking using facial recognition technology.</p>
+            <hr class="my-4">
+            <p>Register students, track attendance in real-time, and generate comprehensive reports.</p>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Register Students</h5>
+                            <p class="card-text">Add new students to the system with their photos.</p>
+                            <a href="/register" class="btn btn-primary">Register</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Track Attendance</h5>
+                            <p class="card-text">Start live attendance tracking using camera.</p>
+                            <a href="/attendance" class="btn btn-success">Start Tracking</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">View Reports</h5>
+                            <p class="card-text">Generate and view attendance reports.</p>
+                            <a href="/reports" class="btn btn-info">View Reports</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
