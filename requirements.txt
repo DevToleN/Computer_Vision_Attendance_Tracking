@@ -1,6 +1,6 @@
-opencv-python
+opencv-python<5
 flask
-mysql-connector-python
 numpy
-face-recognition
 pillow
+pandas
+openpyxl
